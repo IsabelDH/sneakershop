@@ -19,4 +19,11 @@ const login = async (req, res) => {
     });
 }
 
-module.exports = { login };
+const logout = (req, res) => {
+    res.status(200).json({
+        status: "success",
+        message: "User logged out"
+    });
+}
+
+module.exports = { login, logout };
