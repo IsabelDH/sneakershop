@@ -1,3 +1,5 @@
+const users=[]; //tijdelijke array om een user in op te slaan
+
 const login = async (req, res) => {
     const{ email, password} = req.body;
 
@@ -26,4 +28,32 @@ const logout = (req, res) => {
     });
 }
 
-module.exports = { login, logout };
+const register = async (req, res) =>{
+    const {email, password} = req.body;
+
+    if(!email || !password){
+        return res.status(400).json({
+            status: "error",
+            message: "Please provide email and password"
+        });
+    }
+
+    const userExists = users.some((user) => user.email === email);
+    if(userExists){
+        return res.status(400).json({
+            status: "error",
+            message: "Email already exists"
+        });
+    }
+
+    //onze user "opslaan"
+    const newUser = {id: users.lenght+1, email, password};
+    users.push(newUser);
+
+    res.status(201).json({
+        status: "success",
+        message: "User created",
+        data: newUser
+    });
+}
+module.exports = { login, logout, register };
