@@ -1,18 +1,19 @@
 const express = require("express");
 const router = express.Router();
+const { checkAuthentication, checkAdmin } = require('../../../middleware/authMiddleware'); 
 const orderController = require("../../../controllers/api/v1/order");
 
-router.get("/", orderController.index);
+router.get("/", checkAuthentication,orderController.index);
 
-router.get("/:id", orderController.show);
+router.get("/:id", checkAuthentication, orderController.show);
 
-router.post("/", orderController.create);
+router.post("/", checkAuthentication, orderController.create);
 
-router.put("/:id", orderController.update);
+router.put("/:id", checkAdmin, orderController.update);
 
-router.patch("/:id", orderController.patch);
+router.patch("/:id", checkAdmin, orderController.patch);
 
-router.delete("/:id", orderController.destroy);
+router.delete("/:id", checkAdmin, orderController.destroy);
 
 
 
