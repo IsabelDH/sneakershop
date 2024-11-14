@@ -1,4 +1,3 @@
-// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 
 // Middleware voor authenticatie van gebruikers
@@ -10,12 +9,14 @@ const checkAuthentication = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);  // Verifieer het token
-    req.user = decoded;  // Voeg de gedecodeerde gebruiker toe aan de request object
-    next();  // Voer de volgende middleware of route-handler uit
+    req.user = decoded;  
+    next();  
   } catch (err) {
-    return res.status(400).json({ message: 'Invalid token' });
+    console.error(err);
+    return res.status(400).json({ message: 'Invalid or expired token' });
   }
 };
+
 
 // Middleware voor admin controle
 const checkAdmin = (req, res, next) => {
@@ -29,8 +30,8 @@ const checkAdmin = (req, res, next) => {
     if (!decoded.isAdmin) {  // Controleer of de gebruiker een admin is
       return res.status(403).json({ message: 'Admin access required' });
     }
-    req.user = decoded;  // Voeg de gedecodeerde gebruiker toe aan de request object
-    next();  // Voer de volgende middleware of route-handler uit
+    req.user = decoded;  
+    next();  
   } catch (err) {
     return res.status(400).json({ message: 'Invalid token' });
   }

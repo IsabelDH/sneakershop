@@ -27,11 +27,22 @@ const show = (req, res) => {
 };
 
 const create = (req, res) => {
-    const { user, order } = req.body;
+    const { order } = req.body;
 
+    if (!order) {
+        return res.status(400).json({
+            status: "error",
+            message: "Please provide user and order details",
+        });
+    }
+
+    // gebruiker is ingelogd, dus we kunnen de gebruiker uit de request halen
+    const authenticatedUser = req.user; 
+
+    // Maak een nieuwe order aan
     const newOrder = {
         id: orders.length + 1,
-        user,
+        user: authenticatedUser.email, 
         order,
         status: 'Pending',
     };
