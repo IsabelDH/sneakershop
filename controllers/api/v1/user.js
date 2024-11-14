@@ -1,26 +1,58 @@
-const users=[]; //tijdelijke array om een user in op te slaan
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
+// Voorbeeld van gebruikers, met hun rollen
+const users = [
+  {
+    id: 1,
+    email: "admin@admin.com",
+    password: "Admin", 
+    role: "admin", 
+  },
+  {
+    id: 2,
+    email: "user@user.com",
+    password: "123", 
+    role: "user", 
+  }
+];
+
+// Login functie
 const login = async (req, res) => {
-    const{ email, password} = req.body;
+    const { email, password } = req.body;
 
-    const user ={
-        id: 1,
-        email: "test@test.com",
-        password: "1234"
-    }
+    // Zoek naar de gebruiker met de opgegeven email
+    const user = users.find(u => u.email === email);
 
-    if(email !== user.email && await bcrypt.compare(password, user.password)){
+    if (!user) {
         return res.status(401).json({
             status: "error",
-            message: "Invalid mail of password"});
+            message: "Invalid email or password"
+        });
     }
+
+    // Vergelijk wachtwoorden (zonder bcrypt omdat we geen hash gebruiken voor demo)
+    if (password !== user.password) {
+        return res.status(401).json({
+            status: "error",
+            message: "Invalid email or password"
+        });
+    }
+
+    // Genereer JWT-token en voeg de rol van de gebruiker toe aan de payload
+    const token = jwt.sign(
+        { id: user.id, email: user.email, role: user.role },
+        process.env.JWT_SECRET || 'your_jwt_secret', // Dit moet in een .env bestand staan in productie
+        { expiresIn: '1h' }
+    );
 
     res.status(200).json({
         status: "success",
-        message: "User logged in"
+        message: "Login successful",
+        token: token,
     });
-}
-
+};
+//logout functie
 const logout = (req, res) => {
     res.status(200).json({
         status: "success",
@@ -46,8 +78,14 @@ const register = async (req, res) =>{
         });
     }
 
+     // Het wachtwoord hashen
+    // const hashedPassword = await bcrypt.hash(password, 10);
+
     //onze user "opslaan"
-    const newUser = {id: users.lenght+1, email, password};
+    const newUser = {
+        id: users.lenght + 1, 
+        email,
+        password};
     users.push(newUser);
 
     res.status(201).json({

@@ -1,11 +1,8 @@
-// controllers/ordersController.js
-
 let orders = [
     { id: 1, customer: "John Doe", status: "Pending" },
     { id: 2, customer: "Jane Smith", status: "Shipped" }
 ];
 
-// Haalt alle bestellingen op (toegankelijk voor iedereen)
 const index = (req, res) => {
     res.status(200).json({
         status: "success",
@@ -14,7 +11,6 @@ const index = (req, res) => {
     });
 };
 
-// Haalt een specifieke bestelling op (toegankelijk voor iedereen)
 const show = (req, res) => {
     const orderId = parseInt(req.params.id, 10);
     const order = orders.find(o => o.id === orderId);
@@ -30,7 +26,6 @@ const show = (req, res) => {
     });
 };
 
-// Plaatst een nieuwe bestelling (toegankelijk voor iedereen)
 const create = (req, res) => {
     const { user, order } = req.body;
 
@@ -50,7 +45,6 @@ const create = (req, res) => {
     });
 };
 
-// Wijzigt een bestelling (toegankelijk voor iedereen)
 const update = (req, res) => {
     const orderId = parseInt(req.params.id, 10);
     const order = orders.find(o => o.id === orderId);
@@ -61,7 +55,6 @@ const update = (req, res) => {
 
     const { user, order: orderData } = req.body;
 
-    // Update ordergegevens
     order.user = user || order.user;
     order.order = orderData || order.order;
 
@@ -72,7 +65,6 @@ const update = (req, res) => {
     });
 };
 
-// Werk de status bij (alleen admin kan dit doen)
 const patch = (req, res) => {
     const orderId = parseInt(req.params.id, 10);
     const order = orders.find(o => o.id === orderId);
@@ -81,7 +73,6 @@ const patch = (req, res) => {
         return res.status(404).json({ message: 'Order not found' });
     }
 
-    // Werk de status bij als dit is meegestuurd
     if (req.body.status) {
         order.status = req.body.status;
     }
@@ -93,7 +84,6 @@ const patch = (req, res) => {
     });
 };
 
-// Verwijder een bestelling (alleen admin kan dit doen)
 const destroy = (req, res) => {
     const orderId = parseInt(req.params.id, 10);
     const orderIndex = orders.findIndex(o => o.id === orderId);
