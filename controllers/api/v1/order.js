@@ -1,6 +1,5 @@
 let orders = [
-    { id: 1, customer: "John Doe", status: "Pending" },
-    { id: 2, customer: "Jane Smith", status: "Shipped" }
+   
 ];
 
 const index = (req, res) => {
@@ -43,6 +42,7 @@ const create = (req, res) => {
     const newOrder = {
         id: orders.length + 1,
         user: authenticatedUser.email, 
+        name: authenticatedUser.name, 
         order,
         status: 'Pending',
     };

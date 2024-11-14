@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 
+
 // Middleware voor authenticatie van gebruikers
 const checkAuthentication = (req, res, next) => {
   const token = req.header('Authorization')?.split(' ')[1];  // Haal het token uit de Authorization header

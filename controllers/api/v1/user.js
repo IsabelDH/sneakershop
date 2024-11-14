@@ -7,12 +7,14 @@ const users = [
     id: 1,
     email: "admin@admin.com",
     password: "Admin", 
+    name: "Admin",
     role: "admin", 
   },
   {
     id: 2,
     email: "user@user.com",
     password: "123", 
+    name: "User",
     role: "user", 
   }
 ];
@@ -40,11 +42,13 @@ const login = async (req, res) => {
     }
 
     // Genereer JWT-token en voeg de rol van de gebruiker toe aan de payload
+    // Voeg name toe aan de payload in login
     const token = jwt.sign(
-        { id: user.id, email: user.email, role: user.role },
-        process.env.JWT_SECRET || 'your_jwt_secret', // Dit moet in een .env bestand staan in productie
+        { id: user.id, email: user.email, name: user.name, role: user.role }, // zorg dat name aanwezig is
+        process.env.JWT_SECRET,
         { expiresIn: '1h' }
     );
+
 
     res.status(200).json({
         status: "success",
@@ -61,9 +65,9 @@ const logout = (req, res) => {
 }
 
 const register = async (req, res) =>{
-    const {email, password} = req.body;
+    const {email, password, name} = req.body;
 
-    if(!email || !password){
+    if(!email || !password || !name){
         return res.status(400).json({
             status: "error",
             message: "Please provide email and password"
@@ -83,9 +87,12 @@ const register = async (req, res) =>{
 
     //onze user "opslaan"
     const newUser = {
-        id: users.lenght + 1, 
+        id: users.length  + 1, 
         email,
-        password};
+        password,
+        name,
+         role: "user"
+};
     users.push(newUser);
 
     res.status(201).json({
