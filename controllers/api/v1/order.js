@@ -1,6 +1,6 @@
 let orders = [
-    { id: 1, user: "John Doe", name: "John", order: "Hello", status: "Pending" }, //tijdelijke orders om te testen
-    { id: 2, user: "Jane Smith", name: "Jane", order: "Hi", status: "Shipped" }
+    { id: 1, user: "John Doe", name: "John", order: "shoe", status: "Pending" }, //tijdelijke orders om te testen
+    { id: 2, user: "Jane Smith", name: "Jane", order: "Heel", status: "Shipped" }
    
 ];
 
@@ -14,6 +14,13 @@ const index = (req, res) => {
 
 const show = (req, res) => {
     const orderId = parseInt(req.params.id, 10);
+    console.log('received order ID:', req.params.id);
+    console.log('Parsed order ID:', orderId);
+    
+    if (isNaN(orderId)) {
+        return res.status(400).json({ message: 'Invalid order ID' });
+    }
+
     const order = orders.find(o => o.id === orderId);
 
     if (!order) {
@@ -120,9 +127,29 @@ const destroy = (req, res) => {
 
 //winkelmandje toevoegen
 const carts = {};
+
 const addToCart = (req, res) => {
-    const { productId, quantity } = req.body;
+    const { productId, quantity, orderId } = req.body;
     const userId = req.user.id;
+
+    console.log("receiver orderId:", orderId);
+    console.log("receiver productId:", productId);
+    console.log("receiver quantity:", quantity);  
+
+    if(!orderId || !Number.isInteger(orderId)) {
+        return res.status(400).json({
+            status: "error",
+            message: "Please provide a valid order ID",
+        });
+    }
+
+    if(!productId || !Number.isInteger(productId)) {
+        return res.status(400).json({
+            status: "error",
+            message: "Please provide a valid product ID",
+        });
+    }
+
     if (!carts[userId]) {
         carts[userId] = [];
     }
@@ -131,7 +158,10 @@ const addToCart = (req, res) => {
     if (existingItem) {
         existingItem.quantity += quantity;
     } else {
-        carts[userId].push({ productId, quantity });
+        carts[userId].push({ productId, 
+            quantity, 
+            orderId, 
+            status:"Pending" });
     }
 
     res.status(200).json({
@@ -153,6 +183,14 @@ const viewCart = (req, res) => {
             data: [],
         });
     }
+
+    const cartItemsWithOrders = carts[userId].map(item => {
+        const order = orders.find(o => o.id === item.orderId);
+        return {
+            ...item,
+            order,
+        };
+    });
 
     //geeft de producten in het winkelmandje van de gebruiker
     res.status(200).json({
