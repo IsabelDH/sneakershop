@@ -1,4 +1,6 @@
 let orders = [
+    { id: 1, user: "John Doe", name: "John", order: "Hello", status: "Pending" }, //tijdelijke orders om te testen
+    { id: 2, user: "Jane Smith", name: "Jane", order: "Hi", status: "Shipped" }
    
 ];
 
@@ -114,6 +116,81 @@ const destroy = (req, res) => {
     });
 }
 
+// winkelmandje
+
+//winkelmandje toevoegen
+const carts = {};
+const addToCart = (req, res) => {
+    const { productId, quantity } = req.body;
+    const userId = req.user.id;
+    if (!carts[userId]) {
+        carts[userId] = [];
+    }
+
+    const existingItem = carts[userId].find(item => item.productId === productId);
+    if (existingItem) {
+        existingItem.quantity += quantity;
+    } else {
+        carts[userId].push({ productId, quantity });
+    }
+
+    res.status(200).json({
+        status: "success",
+        message: "Product added to cart",
+        data: carts[userId],
+    });
+}
+
+// winkelmandje tonen
+const viewCart = (req, res) => {
+    const userId = req.user.id;
+    console.log("User ID", userId);
+    console.log("Carts", carts);
+    if(!carts[userId] || carts[userId].length === 0) { //als de gebruiker geen winkelmandje heeft
+        return res.status(200).json({
+            status: "succes",
+            message: "Cart is empty",
+            data: [],
+        });
+    }
+
+    //geeft de producten in het winkelmandje van de gebruiker
+    res.status(200).json({
+        status: "success",
+        message: "Cart items",
+        data: carts[userId],
+    });
+}
+
+// winkelmandje leegmaken
+const clearCart = (req, res) => {
+    const {productId} = req.params;
+    const userId = req.user.id;
+    if(!carts[userId] || carts[userId].length === 0) {
+        return res.status(200).json({
+            status: "success",
+            message: "Cart already empty",
+        });
+    }
+    
+    const productIndex = carts[userId].findIndex(item => item.productId === parseInt(productId)); //vindt het product in het winkelmandje
+
+    if (productIndex === -1) {
+        return res.status(404).json({
+            status: "error",
+            message: "Product not found in cart",
+        });
+    }
+
+    carts[userId].splice(productIndex, 1); //verwijderd het product uit het winkelmandje
+
+    res.status(200).json({
+        status: "success",
+        message: "Cart cleared",
+        data: carts[userId],
+    });
+}
+
 module.exports = {
     index,
     show,
@@ -121,6 +198,10 @@ module.exports = {
     update,
     patch,
     destroy,
+
+    viewCart,
+    clearCart,
+    addToCart,
 };
 
 

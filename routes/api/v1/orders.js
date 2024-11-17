@@ -15,6 +15,11 @@ router.patch("/:id", checkAdmin, orderController.patch);
 
 router.delete("/:id", checkAdmin, orderController.destroy);
 
+// Winkelmand route
+router.post("/cart", checkAuthentication, orderController.addToCart);
+router.get("/cart", checkAuthentication, orderController.viewCart);
+router.delete("/cart", checkAuthentication, orderController.clearCart);
+router.delete("/cart/:productId", checkAuthentication, orderController.clearCart);
 
 
 module.exports = router;
