@@ -11,15 +11,10 @@ router.delete("/cart/:productId", checkAuthentication, orderController.clearCart
 
 //dynamische routes
 router.get("/", checkAuthentication,orderController.index);
-
 router.get("/:id", checkAuthentication, orderController.show);
-
 router.post("/", checkAuthentication, orderController.create);
-
 router.put("/:id", checkAdmin, orderController.update);
-
 router.patch("/:id", checkAdmin, orderController.patch);
-
 router.delete("/:id", checkAdmin, orderController.destroy);
 
 

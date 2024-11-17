@@ -3,8 +3,10 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const connectDB = require('./db');
 require('dotenv').config();
 
+connectDB();
 
 const ordersRouter = require('./routes/api/v1/orders');
 const usersRouter = require('./routes/api/v1/users');
