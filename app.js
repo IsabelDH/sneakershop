@@ -10,6 +10,7 @@ connectDB();
 
 const ordersRouter = require('./routes/api/v1/orders');
 const usersRouter = require('./routes/api/v1/users');
+const productsRouter = require('./routes/api/v1/products');
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use("/api/v1/orders", ordersRouter)
 app.use("/api/v1/users", usersRouter)
+app.use("/api/v1/products", productsRouter)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
