@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const connectDB = require('./db');
 require('dotenv').config();
+const cors = require('cors');
 
 connectDB();
 
@@ -14,6 +15,9 @@ const productsRouter = require('./routes/api/v1/products');
 const cartRouter = require('./routes/api/v1/cart');
 
 const app = express();
+
+app.use(cors()); // Dit is voldoende voor veel gevallen
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
