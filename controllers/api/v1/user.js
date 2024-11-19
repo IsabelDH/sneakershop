@@ -13,8 +13,8 @@ const User = require('../../../models/User');
 //   },
 //   {
 //     id: 2,
-//     email: "user@user.com",
-//     password: "123", 
+//     email: "test@test.com",
+//     password: "1234", 
 //     name: "User",
 //     role: "user", 
 //   }
@@ -138,7 +138,7 @@ const register = async (req, res) => {
             email,
             password: hashedPassword,
             name,
-            role: "user", // Standaard rol
+            role, // Standaard rol
         });
 
         res.status(201).json({
