@@ -238,112 +238,6 @@ const destroy = async (req, res) => {
 //     });
 // }
 
-// winkelmandje
-
-//winkelmandje toevoegen
-const carts = {};
-
-const addToCart = (req, res) => {
-    const { productId, quantity, orderId } = req.body;
-    const userId = req.user.id;
-
-    console.log("receiver orderId:", orderId);
-    console.log("receiver productId:", productId);
-    console.log("receiver quantity:", quantity);  
-
-    if(!orderId || !Number.isInteger(orderId)) {
-        return res.status(400).json({
-            status: "error",
-            message: "Please provide a valid order ID",
-        });
-    }
-
-    if(!productId || !Number.isInteger(productId)) {
-        return res.status(400).json({
-            status: "error",
-            message: "Please provide a valid product ID",
-        });
-    }
-
-    if (!carts[userId]) {
-        carts[userId] = [];
-    }
-
-    const existingItem = carts[userId].find(item => item.productId === productId);
-    if (existingItem) {
-        existingItem.quantity += quantity;
-    } else {
-        carts[userId].push({ productId, 
-            quantity, 
-            orderId, 
-            status:"Pending" });
-    }
-
-    res.status(200).json({
-        status: "success",
-        message: "Product added to cart",
-        data: carts[userId],
-    });
-}
-
-// winkelmandje tonen
-const viewCart = (req, res) => {
-    const userId = req.user.id;
-    console.log("User ID", userId);
-    console.log("Carts", carts);
-    if(!carts[userId] || carts[userId].length === 0) { //als de gebruiker geen winkelmandje heeft
-        return res.status(200).json({
-            status: "succes",
-            message: "Cart is empty",
-            data: [],
-        });
-    }
-
-    const cartItemsWithOrders = carts[userId].map(item => {
-        const order = orders.find(o => o.id === item.orderId);
-        return {
-            ...item,
-            order,
-        };
-    });
-
-    //geeft de producten in het winkelmandje van de gebruiker
-    res.status(200).json({
-        status: "success",
-        message: "Cart items",
-        data: carts[userId],
-    });
-}
-
-// winkelmandje leegmaken
-const clearCart = (req, res) => {
-    const {productId} = req.params;
-    const userId = req.user.id;
-    if(!carts[userId] || carts[userId].length === 0) {
-        return res.status(200).json({
-            status: "success",
-            message: "Cart already empty",
-        });
-    }
-    
-    const productIndex = carts[userId].findIndex(item => item.productId === parseInt(productId)); //vindt het product in het winkelmandje
-
-    if (productIndex === -1) {
-        return res.status(404).json({
-            status: "error",
-            message: "Product not found in cart",
-        });
-    }
-
-    carts[userId].splice(productIndex, 1); //verwijderd het product uit het winkelmandje
-
-    res.status(200).json({
-        status: "success",
-        message: "Cart cleared",
-        data: carts[userId],
-    });
-}
-
 module.exports = {
     index,
     show,
@@ -351,10 +245,6 @@ module.exports = {
     update,
     patch,
     destroy,
-
-    viewCart,
-    clearCart,
-    addToCart,
 };
 
 
