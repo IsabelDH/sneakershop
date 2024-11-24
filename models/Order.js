@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const OrderSchame = new mongoose.Schema({
+const OrderSchema = new mongoose.Schema({
     user:{
         type: String,
         required: true
@@ -20,4 +20,4 @@ const OrderSchame = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Order', OrderSchame);
+module.exports = mongoose.model('Order', OrderSchema);
