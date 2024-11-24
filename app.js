@@ -16,7 +16,11 @@ const cartRouter = require('./routes/api/v1/cart');
 
 const app = express();
 
-app.use(cors()); // Dit is voldoende voor veel gevallen
+// Middleware
+app.use(cors({
+  origin: 'http://localhost:5173/login', // Vervang dit met de frontend-URL
+  credentials: true,
+}));
 
 
 // view engine setup
@@ -29,10 +33,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use("/api/v1/orders", ordersRouter)
-app.use("/api/v1/users", usersRouter)
-app.use("/api/v1/products", productsRouter)
-app.use("/api/v1/cart", cartRouter)
+app.use("/api/v1/orders", ordersRouter);
+app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/products", productsRouter);
+app.use("/api/v1/cart", cartRouter);
+
+// Serve Vue app for all other routes
+app.use(express.static(path.join(__dirname, 'dist')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
