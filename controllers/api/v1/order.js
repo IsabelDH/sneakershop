@@ -1,4 +1,4 @@
-const { orders } = require('../../../models/Order'); // Importeer het Order model
+const orders = require('../../../models/Order'); // Importeer het Order model
 
 //alle orders ophalen
 const index =async (req, res) => {
