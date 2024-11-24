@@ -1,7 +1,7 @@
-const orders = require('../../../models/Order'); 
+const { orders } = require('../../../models/Order'); // Importeer het Order model
 
 //alle orders ophalen
-const index = async (req, res) => {
+const index =async (req, res) => {
     try {
         const allOrders = await orders.find();
         res.status(200).json({
