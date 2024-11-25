@@ -46,7 +46,7 @@ const show = async (req, res) => {
 //een nieuwe order aanmaken
 const create = async (req, res) => {
     try {
-        const { user, order } = req.body;
+        const { user, email, address, order } = req.body;
         const newOrder = new orders({ user, email, address, order });
         const savedOrder = await newOrder.save();
         res.status(201).json({

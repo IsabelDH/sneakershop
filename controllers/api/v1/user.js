@@ -74,7 +74,8 @@ const register = async (req, res) => {
             email,
             password: hashedPassword,
             name,
-            role, // Standaard rol
+            role, 
+            address,
         });
 
         res.status(201).json({
@@ -85,6 +86,7 @@ const register = async (req, res) => {
                 email: newUser.email,
                 name: newUser.name,
                 role: newUser.role,
+                address: newUser.address,
             },
         });
     } catch (error) {

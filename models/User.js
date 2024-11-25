@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
         default: 'user',
         enum: ["user", "admin"]
     },
+    // address: { 
+    //     type: String,
+    //     required: true,  
+    // },
 });
 
 const User = mongoose.model('User', userSchema);
