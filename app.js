@@ -6,6 +6,8 @@ const logger = require('morgan');
 const connectDB = require('./db');
 require('dotenv').config();
 const cors = require('cors');
+const http = require('http');
+const socketIo = require('socket.io');
 
 connectDB();
 
@@ -16,10 +18,15 @@ const cartRouter = require('./routes/api/v1/cart');
 
 const app = express();
 
-// // Maak een HTTP server die zowel Express als Socket.IO ondersteunt
-// const server = http.createServer(app); // Verbind Express app met HTTP server
-// const io = socketIo(server); // Koppel Socket.IO aan de HTTP server
-
+const server = http.createServer(app); // Attach the Express app to the HTTP server
+const io = socketIo(server, {
+  cors: {
+    origin: 'http://localhost:5173', // Allow requests from localhost (your Vue app)
+    methods: ['GET', 'POST'], // Allow GET and POST methods
+    allowedHeaders: ['Content-Type'], // Specify allowed headers
+    credentials: true, // Allow cookies and authentication headers
+  }
+});
 
 app.use(cors()); // Dit is voldoende voor veel gevallen
 
@@ -55,6 +62,15 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// Set up Socket.IO events
+io.on('connection', (socket) => {
+  console.log('A user connected');
+  
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
 
+  // Handle additional socket events as needed
+});
 
 module.exports = app;
