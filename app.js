@@ -28,8 +28,12 @@ const io = socketIo(server, {
   }
 });
 
-app.use(cors()); // Dit is voldoende voor veel gevallen
-
+app.use(cors({
+  origin: 'http://localhost:5173', // Zorg ervoor dat de juiste frontend URL wordt toegelaten
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type'],
+  credentials: true
+}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
