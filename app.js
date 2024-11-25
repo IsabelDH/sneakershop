@@ -23,7 +23,7 @@ const io = socketIo(server, {
   cors: {
     origin: 'http://localhost:5173', // Allow requests from localhost (your Vue app)
     methods: ['GET', 'POST'], // Allow GET and POST methods
-    allowedHeaders: ['Content-Type'], // Specify allowed headers
+    allowedHeaders: ['Content-Type',  'Authorization'], // Specify allowed headers
     credentials: true, // Allow cookies and authentication headers
   }
 });
@@ -31,7 +31,7 @@ const io = socketIo(server, {
 app.use(cors({
   origin: 'http://localhost:5173', // Zorg ervoor dat de juiste frontend URL wordt toegelaten
   methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
