@@ -170,7 +170,7 @@ const patch = async (req, res) => {
         }
         res.status(200).json({
             status: "success",
-            message: "Order updated",
+            message: "Order status updated",
             data: updatedOrder,
         });
     } catch (error) {

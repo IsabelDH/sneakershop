@@ -7,9 +7,9 @@ const orderController = require("../../../controllers/api/v1/order");
 router.get("/", checkAuthentication,orderController.index);
 router.get("/:id", checkAuthentication, orderController.show);
 router.post("/", checkAuthentication, orderController.create);
-router.put("/:id", checkAdmin, orderController.update);
-router.patch("/:id", checkAdmin, orderController.patch);
-router.delete("/:id", checkAdmin, orderController.destroy);
+router.put("/:id", checkAuthentication, checkAdmin, orderController.update);
+router.patch("/:id", checkAuthentication, checkAdmin, orderController.patch);
+router.delete("/:id", checkAuthentication, checkAdmin, orderController.destroy);
 
 
 
