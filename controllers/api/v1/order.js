@@ -49,6 +49,7 @@ const create = async (req, res) => {
         const { user, email, address, order } = req.body;
         const newOrder = new orders({ user, email, address, order });
         const savedOrder = await newOrder.save();
+        req.app.io.emit('new-order', savedOrder); 
         res.status(201).json({
             status: "success",
             message: "Order has been placed",
