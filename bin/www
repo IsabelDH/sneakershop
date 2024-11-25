@@ -22,16 +22,21 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);  // Maak de HTTP-server
-var io = socketIo(server);  // Koppel Socket.IO aan de server
+let io;
 
-// Socket.IO event listeners
-io.on('connection', (socket) => {
-  console.log('A user connected');
-  
-  socket.on('disconnect', () => {
-    console.log('User disconnected');
-  });
-});
+function setupSocketServer(server) {
+    io = socketIo(server);
+    io.on('connection', (socket) => {
+        console.log('A user connected');
+        socket.on('disconnect', () => {
+            console.log('User disconnected');
+        });
+    });
+}
+
+setupSocketServer(server);
+
+app.io = io;
 
 
 /**

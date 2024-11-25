@@ -47,18 +47,36 @@ const show = async (req, res) => {
 const create = async (req, res) => {
     try {
         const { user, email, address, order } = req.body;
+
+         // Controleer of de vereiste velden aanwezig zijn
+         if (!user || !email || !address || !order) {
+            return res.status(400).json({
+                status: "error",
+                message: "Missing required fields",
+            });
+        }
+
+
         const newOrder = new orders({ user, email, address, order });
         const savedOrder = await newOrder.save();
-        req.app.io.emit('new-order', savedOrder); 
+      
+        // Verzend de nieuwe order via Socket.io
+        if (req.app.io) {  // Controleer of io beschikbaar is
+            req.app.io.emit('new order', savedOrder); 
+        } else {
+            console.error("Socket.io instance not available");
+        }
         res.status(201).json({
             status: "success",
             message: "Order has been placed",
             data: savedOrder,
         });
     } catch (error) {
+        console.error("Error while placing order:", error);  // Log de fout op de server
         res.status(500).json({
             status: "error",
             message: "Failed to place order",
+            error: error.message,  // Voeg de foutmelding toe aan de response
         });
     }
 }
