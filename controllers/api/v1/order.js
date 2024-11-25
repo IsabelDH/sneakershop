@@ -47,7 +47,7 @@ const show = async (req, res) => {
 const create = async (req, res) => {
     try {
         const { user, order } = req.body;
-        const newOrder = new orders({ user, order });
+        const newOrder = new orders({ user, email, address, order });
         const savedOrder = await newOrder.save();
         res.status(201).json({
             status: "success",

@@ -1,7 +1,5 @@
 const createError = require('http-errors');
 const express = require('express');
-const http = require('http'); 
-const socketIo = require('socket.io');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -18,9 +16,9 @@ const cartRouter = require('./routes/api/v1/cart');
 
 const app = express();
 
-// Maak een HTTP server die zowel Express als Socket.IO ondersteunt
-const server = http.createServer(app); // Verbind Express app met HTTP server
-const io = socketIo(server); // Koppel Socket.IO aan de HTTP server
+// // Maak een HTTP server die zowel Express als Socket.IO ondersteunt
+// const server = http.createServer(app); // Verbind Express app met HTTP server
+// const io = socketIo(server); // Koppel Socket.IO aan de HTTP server
 
 
 app.use(cors()); // Dit is voldoende voor veel gevallen
@@ -58,15 +56,5 @@ app.use(function(err, req, res, next) {
 });
 
 
-// Socket.IO logica toevoegen
-io.on('connection', (socket) => {
-  console.log('A user connected');
-  
-  // Event om nieuwe orders door te sturen naar de frontend
-  socket.on('disconnect', () => {
-    console.log('User disconnected');
-  });
-});
 
-// Exporteer de server in plaats van app.js
-module.exports = { app, server };
+module.exports = app;

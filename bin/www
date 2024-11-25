@@ -7,6 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('sneakershop:server');
 var http = require('http');
+var socketIo = require('socket.io');  // Voeg deze regel toe
+
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +21,18 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = http.createServer(app);  // Maak de HTTP-server
+var io = socketIo(server);  // Koppel Socket.IO aan de server
+
+// Socket.IO event listeners
+io.on('connection', (socket) => {
+  console.log('A user connected');
+  
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
 
 /**
  * Listen on provided port, on all network interfaces.
