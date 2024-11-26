@@ -98,44 +98,44 @@ const register = async (req, res) => {
     }
 };
 
-// const updatepassword = async (req, res) => {
-//     const { oldPassword, newPassword } = req.body;
+const updatepassword = async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
 
-//     try {
-//         const user = await User.findById(req.user.id);
-//         if (!user) {
-//             return res.status(404).json({
-//                 status: "error",
-//                 message: "User not found",
-//             });
-//         }
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({
+                status: "error",
+                message: "User not found",
+            });
+        }
 
-//         const isMatch = await bcrypt.compare(oldPassword, user.password);
-//         if (!isMatch) {
-//             return res.status(400).json({
-//                 status: "error",
-//                 message: "Old password is incorrect",
-//             });
-//         }
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({
+                status: "error",
+                message: "Old password is incorrect",
+            });
+        }
 
-//         const hashedPassword = await bcrypt.hash(newPassword, 10);
-//         user.password = hashedPassword;
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
 
-//         await user.save();
+        await user.save();
 
-//         res.status(200).json({
-//             status: "success",
-//             message: "Password updated successfully",
-//         });
-//     } catch (error) {
-//         console.error("Error updating password:", error);
-//         res.status(500).json({
-//             status: "error",
-//             message: "An error occurred",
-//             error: error.message,
-//         });
-//     }
-// };
+        res.status(200).json({
+            status: "success",
+            message: "Password updated successfully",
+        });
+    } catch (error) {
+        console.error("Error updating password:", error);
+        res.status(500).json({
+            status: "error",
+            message: "An error occurred",
+            error: error.message,
+        });
+    }
+};
 
 
-module.exports = { login, logout, register };
+module.exports = { login, logout, register, updatepassword };
