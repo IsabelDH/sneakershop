@@ -23,10 +23,10 @@ const userSchema = new mongoose.Schema({
         default: 'user',
         enum: ["user", "admin"]
     },
-    address: { 
-        type: String,
-        required: true,  
-    },
+    // address: { 
+    //     type: String,
+    //     required: true,  
+    // },
 });
 
 //Hash het wachtwoord voordat het wordt opgeslagen
