@@ -98,4 +98,51 @@ const register = async (req, res) => {
     }
 };
 
-module.exports = { login, logout, register };
+const updatePassword = async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({
+                status: "error",
+                message: "User not found",
+            });
+        }
+
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({
+                status: "error",
+                message: "Old password is incorrect",
+            });
+        }
+
+        if (newPassword.length < 8) {
+            return res.status(400).json({
+                status: "error",
+                message: "New password must be at least 8 characters long",
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+
+        await user.save();
+
+        res.status(200).json({
+            status: "success",
+            message: "Password updated successfully",
+        });
+    } catch (error) {
+        console.error("Error updating password:", error);
+        res.status(500).json({
+            status: "error",
+            message: "An error occurred",
+            error: error.message,
+        });
+    }
+};
+
+
+module.exports = { login, logout, register, updatePassword };
