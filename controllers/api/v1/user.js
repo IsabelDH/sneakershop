@@ -98,7 +98,7 @@ const register = async (req, res) => {
     }
 };
 
-const updatePassword = async (req, res) => {
+const updatepassword = async (req, res) => {
     const { oldPassword, newPassword } = req.body;
 
     try {
@@ -115,13 +115,6 @@ const updatePassword = async (req, res) => {
             return res.status(400).json({
                 status: "error",
                 message: "Old password is incorrect",
-            });
-        }
-
-        if (newPassword.length < 8) {
-            return res.status(400).json({
-                status: "error",
-                message: "New password must be at least 8 characters long",
             });
         }
 
@@ -145,4 +138,4 @@ const updatePassword = async (req, res) => {
 };
 
 
-module.exports = { login, logout, register, updatePassword };
+module.exports = { login, logout, register, updatepassword };
