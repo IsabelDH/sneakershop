@@ -54,7 +54,7 @@ const logout = (req, res) => {
 };
 
 const register = async (req, res) => {
-    const { email, password, name, role } = req.body;
+    const { email, password, name, role, address  } = req.body;
 
     try {
         // Controleer of de gebruiker al bestaat

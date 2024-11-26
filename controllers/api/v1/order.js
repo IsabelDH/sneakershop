@@ -57,7 +57,7 @@ const create = async (req, res) => {
         }
 
 
-        const newOrder = new orders({ user, email, address, order });
+        const newOrder = new orders({ user, email, address, order, status: "new order"   });
         const savedOrder = await newOrder.save();
       
         // Verzend de nieuwe order via Socket.io
