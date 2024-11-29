@@ -57,12 +57,12 @@ const create = async (req, res) => {
         }
 
 
-        const newOrder = new orders({ user, email, address, order, status: "new order"   });
+        const newOrder = new orders({ user, email, address, order, status: "New order"   });
         const savedOrder = await newOrder.save();
       
         // Verzend de nieuwe order via Socket.io
         if (req.app.io) {  // Controleer of io beschikbaar is
-            req.app.io.emit('new order', savedOrder); 
+            req.app.io.emit('New order', savedOrder); 
         } else {
             console.error("Socket.io instance not available");
         }
