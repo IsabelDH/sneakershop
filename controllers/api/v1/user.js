@@ -99,7 +99,7 @@ const register = async (req, res) => {
 };
 
 const updatepassword = async (req, res) => {
-    const { password, newPassword } = req.body;
+    const { oldPassword, newPassword } = req.body;
 
     try {
         const user = await User.findById(req.user.id);
@@ -111,7 +111,7 @@ const updatepassword = async (req, res) => {
             });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
         if (!isMatch) {
             return res.status(400).json({
                 status: "error",
