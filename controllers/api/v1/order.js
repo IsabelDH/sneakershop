@@ -49,7 +49,7 @@ const create = async (req, res) => {
         const { user, email, address, order } = req.body;
 
          // Controleer of de vereiste velden aanwezig zijn
-         if (!user || !email || !address || !order) {
+         if (!user || !email || !address || !order || order.length === 0) {
             return res.status(400).json({
                 status: "error",
                 message: "Missing required fields",
