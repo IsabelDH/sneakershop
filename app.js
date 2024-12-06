@@ -46,10 +46,16 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use("/api/v1/orders", ordersRouter)
-app.use("/api/v1/users", usersRouter)
-app.use("/api/v1/products", productsRouter)
-app.use("/api/v1/cart", cartRouter)
+app.use("/api/v1/orders", ordersRouter);
+app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/products", productsRouter);
+app.use("/api/v1/cart", cartRouter);
+
+app.use((req, res, next) => {
+  req.io = io; // Attach io to req
+  next();
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -67,15 +73,18 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// Set up Socket.IO events
 io.on('connection', (socket) => {
-  console.log('A user connected');
-  
+  console.log('A user connected:', socket.id);
+
   socket.on('disconnect', () => {
-    console.log('User disconnected');
+    console.log('A user disconnected:', socket.id);
   });
 
-  // Handle additional socket events as needed
+  // Example event
+  socket.on('test event', (data) => {
+    console.log('Received from client:', data);
+    socket.emit('server response', { message: 'Hello from server!' });
+  });
 });
 
 module.exports = app;
