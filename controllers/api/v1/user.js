@@ -17,9 +17,6 @@ const login = async (req, res) => {
 
         // Vergelijk het ingevoerde wachtwoord met het gehashte wachtwoord
         const isMatch = await bcrypt.compare(password, user.password);
-        console.log('User password:', user.password);
-console.log('Entered password:', password);
-console.log('Passwords match:', isMatch);
         if (!isMatch) {
             return res.status(401).json({
                 status: "error",
