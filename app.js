@@ -8,7 +8,7 @@ require('dotenv').config();
 const cors = require('cors');
 const http = require('http');
 const socketIo = require('socket.io');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 connectDB();
 
