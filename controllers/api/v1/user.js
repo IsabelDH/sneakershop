@@ -99,7 +99,7 @@ const register = async (req, res) => {
 };
 
 const updatepassword = async (req, res) => {
-    const { oldPassword, newPassword } = req.body;
+    const { password, newPassword } = req.body;
 
     try {
         const user = await User.findById(req.user.id);
