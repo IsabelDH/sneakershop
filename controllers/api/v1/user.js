@@ -111,7 +111,7 @@ const updatepassword = async (req, res) => {
             });
         }
 
-        const isMatch = await bcrypt.compare(oldPassword, user.password);
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({
                 status: "error",
