@@ -6,25 +6,17 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        console.log(`Attempting to log in with email: ${email}`);
-        // Zoek de gebruiker op basis van het e-mailadres
+        // Zoek naar de gebruiker in de database
         const user = await User.findOne({ email });
-
         if (!user) {
-            console.log(`User not found: ${email}`);
             return res.status(401).json({
                 status: "error",
                 message: "Invalid email or password",
             });
-            // return res.status(401).json({
-            //     status: "error",
-            //     message: "Invalid email or password",
-            // });
         }
 
-        // Zorg ervoor dat het wachtwoord op de juiste manier wordt vergeleken
-        // const isMatch = await bcrypt.compare(password, user.password);
-        const isMatch = await user.comparePassword(password); 
+        // Vergelijk het ingevoerde wachtwoord met het gehashte wachtwoord
+        const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(401).json({
                 status: "error",
@@ -32,21 +24,13 @@ const login = async (req, res) => {
             });
         }
 
-        // Genereer JWT-token voor de gebruiker
+        // Genereer JWT-token
         const token = jwt.sign(
             { id: user._id, email: user.email, name: user.name, role: user.role },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
 
-        // Stuur de JWT-token terug in een cookie
-        res.cookie('token', token, {
-            httpOnly: true,  // Zorg ervoor dat de cookie niet toegankelijk is via JavaScript
-            secure: process.env.NODE_ENV === 'production',  // Zorg ervoor dat het alleen werkt via HTTPS in productie
-            maxAge: 3600000,  // 1 uur
-        });
-
-        // Stuur het succesbericht terug
         res.status(200).json({
             status: "success",
             message: "Login successful",
@@ -60,7 +44,6 @@ const login = async (req, res) => {
         });
     }
 };
-
 
 
 const logout = (req, res) => {
@@ -84,10 +67,7 @@ const register = async (req, res) => {
         }
 
         // Hash het wachtwoord
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        console.log('Wachtwoord voor hashing:', password);
-        console.log('Gehasht wachtwoord:', hashedPassword);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         // Maak een nieuwe gebruiker aan
         const newUser = await User.create({
@@ -97,7 +77,6 @@ const register = async (req, res) => {
             role, 
             address,
         });
-        
 
         res.status(201).json({
             status: "success",
@@ -111,10 +90,10 @@ const register = async (req, res) => {
             },
         });
     } catch (error) {
-        console.error(`Registration error: ${error.message}`);
         res.status(500).json({
             status: "error",
-            message: "Error registering user",
+            message: "An error occurred",
+            error: error.message,
         });
     }
 };
@@ -160,4 +139,4 @@ const updatepassword = async (req, res) => {
 };
 
 
-module.exports = { login, logout, register };
+module.exports = { login, logout, register, updatepassword };

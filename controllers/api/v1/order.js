@@ -47,19 +47,20 @@ const show = async (req, res) => {
 const create = async (req, res) => {
     try {
         const { user, email, address, order } = req.body;
+        console.log("order ontvanger", req.body);
 
          // Controleer of de vereiste velden aanwezig zijn
-         if (!user || !email || !address || !order) {
+         if (!user || !email || !address || !order || order.length === 0) {
             return res.status(400).json({
                 status: "error",
                 message: "Missing required fields",
             });
         }
 
-
         const newOrder = new orders({ user, email, address, order, status: "New order"   });
         const savedOrder = await newOrder.save();
-      
+        console.log("order opgeslagen", savedOrder);
+        
         // Verzend de nieuwe order via Socket.io
         if (req.app.io) {  // Controleer of io beschikbaar is
             req.app.io.emit('New order', savedOrder); 
