@@ -1,9 +1,12 @@
 const mongoose = require('mongoose');
 
 const OrderItemSchema = new mongoose.Schema({
-    productId:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+    material:{
+        type: String,
+        required: true
+    },
+    color:{
+        type: String,
         required: true
     },
     size:{
