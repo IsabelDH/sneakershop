@@ -28,6 +28,7 @@ const io = socketIo(server, {
     credentials: true, // Allow cookies and authentication headers
   }
 });
+const corsOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 app.use(cors({
   origin: corsOrigin, // Zorg ervoor dat de juiste frontend URL wordt toegelaten
