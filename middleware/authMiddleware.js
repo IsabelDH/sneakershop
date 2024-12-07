@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 
-
 // Middleware voor authenticatie van gebruikers
 const checkAuthentication = (req, res, next) => {
   const token = req.header('Authorization')?.split(' ')[1];  // Haal het token uit de Authorization header
@@ -10,10 +9,11 @@ const checkAuthentication = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);  // Verifieer het token
+    console.log('Decoded token:', decoded);
     req.user = decoded;  
     next();  
   } catch (err) {
-    console.error(err);
+    console.error('JWT error:', err);
     return res.status(400).json({ message: 'Invalid or expired token' });
   }
 };

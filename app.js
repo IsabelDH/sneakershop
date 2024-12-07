@@ -8,7 +8,7 @@ require('dotenv').config();
 const cors = require('cors');
 const http = require('http');
 const socketIo = require('socket.io');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 connectDB();
 
@@ -28,9 +28,9 @@ const io = socketIo(server, {
     credentials: true, // Allow cookies and authentication headers
   }
 });
-
+const corsOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
 app.use(cors({
-  origin: 'http://localhost:5173', // Zorg ervoor dat de juiste frontend URL wordt toegelaten
+  origin: corsOrigin, // Zorg ervoor dat de juiste frontend URL wordt toegelaten
   methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -73,6 +73,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
 
@@ -86,5 +87,6 @@ io.on('connection', (socket) => {
     socket.emit('server response', { message: 'Hello from server!' });
   });
 });
+
 
 module.exports = app;
