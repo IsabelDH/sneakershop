@@ -29,6 +29,10 @@ const io = socketIo(server, {
   }
 });
 
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
 app.use(cors({
   origin: 'http://localhost:5173', // Zorg ervoor dat de juiste frontend URL wordt toegelaten
   methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
