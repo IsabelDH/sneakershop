@@ -23,6 +23,11 @@ const app = express();
 const server = http.createServer(app); // Attach the Express app to the HTTP server
 const corsOrigin = 'https://sneakershop-vue.vercel.app';
 
+const allowedOrigins = [
+  'http://localhost:5173', // Lokale ontwikkelomgeving
+  'https://sneakershop-vue.vercel.app', // Productie URL
+];
+
 const io = socketIo(server, {
   cors: {
     origin: corsOrigin, // Allow requests from localhost (your Vue app)
