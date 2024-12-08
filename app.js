@@ -28,6 +28,11 @@ const io = socketIo(server, {
     credentials: true, // Allow cookies and authentication headers
   }
 });
+
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
 const corsOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
 
 app.use(cors({
