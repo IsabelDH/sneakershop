@@ -23,9 +23,13 @@ const show = async (req, res) => {
     try {
         const orderId = req.params.id;
         // Controleer of de ID geldig is
-        if (!/^[0-9a-fA-F]{24}$/.test(orderId)) {
+        // if (!/^[0-9a-fA-F]{24}$/.test(orderId)) {
+        //     return res.status(400).json({ message: 'Invalid order ID format' });
+        // }
+        if (!mongoose.Types.ObjectId.isValid(orderId)) {
             return res.status(400).json({ message: 'Invalid order ID format' });
         }
+        
         const order = await orders.findById(orderId);
         if (!order) {
             return res.status(404).json({ message: 'Order not found' });
