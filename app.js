@@ -22,10 +22,10 @@ const app = express();
 const server = http.createServer(app); // Attach the Express app to the HTTP server
 const io = socketIo(server, {
   cors: {
-    origin: 'http://localhost:5173', // Allow requests from localhost (your Vue app)
-    methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'], // Allow GET and POST methods
-    allowedHeaders: ['Content-Type',  'Authorization'], // Specify allowed headers
-    credentials: true, // Allow cookies and authentication headers
+    origin: process.env.FRONTEND_URL || 'http://localhost:5173', // Allow both local and production
+    methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
   }
 });
 
@@ -33,13 +33,24 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-const corsOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
+// Dynamische CORS-configuratie
+const allowedOrigins = [
+  'http://localhost:5173',  // Lokale URL
+  'https://sneakershop-vue.vercel.app'  // Productie URL
+];
 
 app.use(cors({
-  origin: corsOrigin, // Zorg ervoor dat de juiste frontend URL wordt toegelaten
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      // Sta verzoeken van de bovenstaande origins toe
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  credentials: true,
 }));
 
 // view engine setup
@@ -62,7 +73,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -70,15 +80,11 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
-
 
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
@@ -87,12 +93,10 @@ io.on('connection', (socket) => {
     console.log('A user disconnected:', socket.id);
   });
 
-  // Example event
   socket.on('test event', (data) => {
     console.log('Received from client:', data);
     socket.emit('server response', { message: 'Hello from server!' });
   });
 });
-
 
 module.exports = app;
