@@ -9,7 +9,7 @@ const OrderItemSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    texture:{
+    material:{
         type: String,
         required: true
     },
