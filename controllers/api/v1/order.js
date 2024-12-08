@@ -46,18 +46,18 @@ const show = async (req, res) => {
 //een nieuwe order aanmaken
 const create = async (req, res) => {
     try {
-        const { user, email, address, order } = req.body;
+        const { user, email, address, nameOrder, order } = req.body;
         console.log("order ontvanger", req.body);
 
          // Controleer of de vereiste velden aanwezig zijn
-         if (!user || !email || !address || !order || order.length === 0) {
+         if (!user || !email || !address || !nameOrder || !order || order.length === 0) {
             return res.status(400).json({
                 status: "error",
                 message: "Missing required fields",
             });
         }
 
-        const newOrder = new orders({ user, email, address, order, status: "New order"   });
+        const newOrder = new orders({ user, email, address, nameOrder, order, status: "New order"   });
         const savedOrder = await newOrder.save();
         console.log("order opgeslagen", savedOrder);
         

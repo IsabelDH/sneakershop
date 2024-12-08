@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const OrderItemSchema = new mongoose.Schema({
+    shoename:{
+        type: String,
+        required: true
+    },
     name:{
         type: String,
         required: true
@@ -15,6 +19,10 @@ const OrderItemSchema = new mongoose.Schema({
     },
     size:{
         type: Number,
+        required: true
+    },
+    charm:{
+        type: String,
         required: true
     },
     quantity:{
@@ -33,6 +41,10 @@ const OrderSchema = new mongoose.Schema({
         required: true
     },
     address:{
+        type: String,
+        required: true
+    },
+    nameOrder:{
         type: String,
         required: true
     },
