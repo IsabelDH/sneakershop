@@ -20,7 +20,7 @@ const cartRouter = require('./routes/api/v1/cart');
 const app = express();
 
 // const corsOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
-const corsOrigin = process.env.FRONTEND_URL || 'https://sneakershop-vue.vercel.app/';
+const corsOrigin = 'https://sneakershop-vue.vercel.app';
 
 const server = http.createServer(app); // Attach the Express app to the HTTP server
 const io = socketIo(server, {
