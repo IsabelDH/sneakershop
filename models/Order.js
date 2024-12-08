@@ -25,14 +25,14 @@ const OrderItemSchema = new mongoose.Schema({
         type: {
             name: {
                 type: String,
-                required: false  
+                required: true  
             },
             position: {
                 type: String,
-                required: false  
+                required: true  
             }
         },
-        required: false 
+        required: true 
     },
     quantity:{
         type: Number,
