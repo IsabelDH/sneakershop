@@ -23,16 +23,10 @@ const OrderItemSchema = new mongoose.Schema({
     },
     charm: {
         type: {
-            name: {
-                type: String,
-                required: false  
-            },
-            position: {
-                type: String,
-                required: false  
-            }
+          name: { type: String, required: true },
+          position: { type: String, required: true }
         },
-        required: false 
+        required: true
     },
     quantity:{
         type: Number,
