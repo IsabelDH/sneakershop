@@ -22,7 +22,7 @@ const OrderItemSchema = new mongoose.Schema({
         required: true
     },
     charm:{
-        type: String,
+        type: Object,
         required: true
     },
     quantity:{
