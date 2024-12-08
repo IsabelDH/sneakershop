@@ -66,13 +66,13 @@ const register = async (req, res) => {
             });
         }
 
-        // Hash het wachtwoord
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // // Hash het wachtwoord
+        // const hashedPassword = await bcrypt.hash(password, 10);
 
         // Maak een nieuwe gebruiker aan
         const newUser = await User.create({
             email,
-            password: hashedPassword,
+            password,
             name,
             role, 
             address,
