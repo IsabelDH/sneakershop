@@ -19,25 +19,22 @@ const cartRouter = require('./routes/api/v1/cart');
 
 const app = express();
 
+// const corsOrigin = process.env.FRONTEND_URL || 'http://localhost:5173';
 const server = http.createServer(app); // Attach the Express app to the HTTP server
+const corsOrigin = 'https://sneakershop-vue.vercel.app';
+
 const io = socketIo(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173', // Allow both local and production
-    methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
+    origin: corsOrigin, // Allow requests from localhost (your Vue app)
+    methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'], // Allow GET and POST methods
+    allowedHeaders: ['Content-Type',  'Authorization'], // Specify allowed headers
+    credentials: true, // Allow cookies and authentication headers
   }
 });
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
-
-// Dynamische CORS-configuratie
-const allowedOrigins = [
-  'http://localhost:5173',  // Lokale URL
-  'https://sneakershop-vue.vercel.app'  // Productie URL
-];
 
 app.use(cors({
   origin: (origin, callback) => {
