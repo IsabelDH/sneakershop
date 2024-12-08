@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 
 const OrderItemSchema = new mongoose.Schema({
+    shoename:{
+        type: String,
+        required: true
+    },
     name:{
         type: String,
         required: true
     },
-    material:{
+    texture:{
         type: String,
         required: true
     },
