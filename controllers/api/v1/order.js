@@ -57,6 +57,8 @@ const create = async (req, res) => {
             });
         }
 
+        const orderName = 'Shoe Model - ${Date.now().toString().slice(-4)}';
+
         const newOrder = new orders({ user, email, address, order, status: "New order"   });
         const savedOrder = await newOrder.save();
         console.log("order opgeslagen", savedOrder);

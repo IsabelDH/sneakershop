@@ -40,6 +40,10 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    ordername:{
+        type: String,
+        required: true
+    },
     order:{
         type: [OrderItemSchema],
         required: true
