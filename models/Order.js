@@ -21,6 +21,10 @@ const OrderItemSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    charm:{
+        type: String,
+        required: true
+    },
     quantity:{
         type: Number,
         default: 1
@@ -40,7 +44,7 @@ const OrderSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    ordername:{
+    nameOrder:{
         type: String,
         required: true
     },
